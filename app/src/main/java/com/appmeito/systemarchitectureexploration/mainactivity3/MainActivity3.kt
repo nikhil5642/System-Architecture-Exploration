@@ -21,7 +21,7 @@ class MainActivity3 : AppCompatActivity(),RecyclerPaginationInterface{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val mainRepository: MainRepository = MainRepository(HttpClientSelector.getClient(HTTPTYPES.HTTP11_OKHTTP))
+        val mainRepository: MainRepository = MainRepository(HttpClientSelector.getClient(HTTPTYPES.HTTP30_OKHTTP))
 
         viewModel3=ViewModelProvider(this,MainViewModelFactory3(mainRepository))[MainViewModel3::class.java]
         val sharedViewPool=RecycledViewPool()
