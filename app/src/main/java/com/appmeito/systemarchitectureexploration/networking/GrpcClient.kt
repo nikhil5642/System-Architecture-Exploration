@@ -3,8 +3,17 @@ package com.appmeito.systemarchitectureexploration.networking
 import android.content.ContentValues.TAG
 import android.os.Environment
 import android.util.Log
+import io.grpc.CallOptions
+import io.grpc.Channel
+import io.grpc.ClientCall
+import io.grpc.ClientInterceptor
+import io.grpc.ForwardingClientCall
+import io.grpc.ForwardingClientCallListener
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
+import io.grpc.Metadata
+import io.grpc.MethodDescriptor
+import io.grpc.Status
 import io.grpc.stub.StreamObserver
 import myfirstgrpc.GreeterGrpc
 import myfirstgrpc.MyFirstGrpc
@@ -137,9 +146,40 @@ class GrpcClient(private val channel: ManagedChannel) {
         fun create(host: String, port: Int): GrpcClient {
             val channel = ManagedChannelBuilder.forAddress(host, port)
                 .usePlaintext()
+                .intercept(LoggingInterceptor())
                 .build()
             return GrpcClient(channel)
         }
 
+    }
+}
+
+class LoggingInterceptor : ClientInterceptor {
+    override fun <ReqT, RespT> interceptCall(
+        method: MethodDescriptor<ReqT, RespT>,
+        callOptions: CallOptions,
+        next: Channel
+    ): ClientCall<ReqT, RespT> {
+        return object : ForwardingClientCall.SimpleForwardingClientCall<ReqT, RespT>(next.newCall(method, callOptions)) {
+            override fun start(responseListener: Listener<RespT>?, headers: io.grpc.Metadata?) {
+                println("Request headers: $headers")
+                super.start(object : ForwardingClientCallListener.SimpleForwardingClientCallListener<RespT>(responseListener) {
+                    override fun onMessage(message: RespT) {
+                        println("Response  message: $message")
+                        super.onMessage(message)
+                    }
+
+                    override fun onClose(status: Status?, trailers: Metadata?) {
+                        println("Response trailers: $trailers")
+                        super.onClose(status, trailers)
+                    }
+                }, headers)
+            }
+
+            override fun sendMessage(message: ReqT) {
+                println("Request message: $message")
+                super.sendMessage(message)
+            }
+        }
     }
 }

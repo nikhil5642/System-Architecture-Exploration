@@ -35,8 +35,12 @@ class MainViewModel(val repository: MainRepository):ViewModel() {
     fun testGrpcClient(){
         viewModelScope.launch(Dispatchers.IO) {
             val client = GrpcClient.create(BASE_HOST, 50051)
-            val response = client.sayHello("World")
-            println("Response: $response")
+            try{
+                val response = client.sayHello("World")
+                println("Response: $response")
+            }catch (e: Exception){
+                e.printStackTrace()
+            }
 
             // Server Streaming example
             client.streamGreetings("World")
@@ -46,6 +50,7 @@ class MainViewModel(val repository: MainRepository):ViewModel() {
 
             // Bidirectional Streaming example
             client.chat()
+
             delay(100000)
             client.shutDown()
         }
