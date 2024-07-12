@@ -36,8 +36,25 @@ class MainViewModel(val repository: MainRepository):ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             val client = GrpcClient.create(BASE_HOST, 50051)
             val response = client.sayHello("World")
-            client.shutDown()
             println("Response: $response")
+
+            // Server Streaming example
+            client.streamGreetings("World")
+
+            // Client Streaming example
+            client.sendGreetings(listOf("Alice", "Bob", "Charlie"))
+
+            // Bidirectional Streaming example
+            client.chat()
+            delay(100000)
+            client.shutDown()
+        }
+    }
+
+    fun testGrpcFileDownload(){
+        val client = GrpcClient.create(BASE_HOST, 50051)
+        client.downloadFile("DappLinker Polygon Grant Submission.pdf.zip") {
+            client.shutDown()
         }
     }
 

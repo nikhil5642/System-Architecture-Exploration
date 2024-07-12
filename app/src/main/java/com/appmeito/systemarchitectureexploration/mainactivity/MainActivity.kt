@@ -100,6 +100,12 @@ class MainActivity : ComponentActivity() {
                                 mainViewModel.testGrpcClient() },
                         )
 
+                        CustomButton(
+                            title = "Test GRPC File Download",
+                            onButtonClick = {
+                                mainViewModel.testGrpcFileDownload() },
+                        )
+
                     }
                 }
             }

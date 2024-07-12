@@ -119,6 +119,15 @@ protobuf {
         }
     }
 }
+//tasks.register<Exec>("generateGrpc") {
+//    group = "protobuf"
+//    description = "Generate only gRPC files"
+//    commandLine("protoc",
+//        "--plugin=protoc-gen-grpc-java=${protobuf.plugins.getByName("grpc").artifact}",
+//        "--grpc-java_out=${projectDir}/build/generated/source/proto/main/grpc",
+//        "--proto_path=${projectDir}/src/main/resources/proto",
+//        "${projectDir}/src/main/resources/proto/myFirstGrpc.proto")
+//}
 
 
 
