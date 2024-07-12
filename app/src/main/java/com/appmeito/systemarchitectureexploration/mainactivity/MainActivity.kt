@@ -1,5 +1,8 @@
 package com.appmeito.systemarchitectureexploration.mainactivity
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -7,6 +10,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -18,6 +23,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.appmeito.systemarchitectureexploration.MainRepository
 import com.appmeito.systemarchitectureexploration.networking.HTTPTYPES
 import com.appmeito.systemarchitectureexploration.networking.HttpClientSelector
+import com.appmeito.systemarchitectureexploration.networking.HttpHelper.BASE_URL
+import com.appmeito.systemarchitectureexploration.networking.HttpStreaming
 
 import com.appmeito.systemarchitectureexploration.ui.theme.SystemArchitectureExplorationTheme
 
@@ -25,17 +32,75 @@ class MainActivity : ComponentActivity() {
     lateinit var mainViewModel: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 101)
+            }
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 100)
+            }
+        }
         val mainRepository: MainRepository = MainRepository(HttpClientSelector.getClient(HTTPTYPES.HTTP11_OKHTTP))
         mainViewModel= ViewModelProvider(this, MainViewModelFactory(mainRepository))[MainViewModel::class.java]
         enableEdgeToEdge()
         setContent {
             SystemArchitectureExplorationTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    CustomButton(
-                        title = "HTTP1.1 Request Test",
-                        onButtonClick = {mainViewModel.onButtonPress()},
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    Column(
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState()) // Makes the column scrollable
+                    ) {
+                        CustomButton(
+                            title = "HTTP1.1 Request Test",
+                            onButtonClick = {mainViewModel.onButtonPress()},
+                        )
+                        CustomButton(
+                            title = "HTTP Long Polling Test",
+                            onButtonClick = {mainViewModel.startLongPolling()},
+                        )
+
+                        CustomButton(
+                            title = "HTTP Short Polling Test",
+                            onButtonClick = {mainViewModel.startShortPolling()},
+                        )
+                        CustomButton(
+                            title = "HTTP Streaming Test",
+                            onButtonClick = {mainViewModel.startHTTPStreaming()},
+                        )
+                        CustomButton(
+                            title = "HTTP Streaming File Download Test",
+                            onButtonClick = {
+                                HttpStreaming().downloadFile(
+                                    context = this@MainActivity ,
+                                    mainViewModel.client ,
+                                    "$BASE_URL/download-file",
+                                    "large_file.zip")},
+                        )
+                        CustomButton(
+                            title = "Websocket Connect",
+                            onButtonClick = {
+                              mainViewModel.webSocketConnect() },
+                        )
+                        CustomButton(
+                            title = "Test Websocket send",
+                            onButtonClick = {
+                                mainViewModel.testWebSocketSend() },
+                        )
+                        CustomButton(
+                            title = "WebSocket Disconnect",
+                            onButtonClick = {
+                                mainViewModel.webSocketDisConnect() },
+                        )
+
+                        CustomButton(
+                            title = "Test GRPC Client",
+                            onButtonClick = {
+                                mainViewModel.testGrpcClient() },
+                        )
+
+                    }
                 }
             }
         }

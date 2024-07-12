@@ -56,3 +56,19 @@ bapp/src/main/java/com/appmeito/systemarchitectureexploration/mainactivity3/Pagi
 :
 
 .gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
+‘
+aapp/src/main/java/com/appmeito/systemarchitectureexploration/mainactivity/MainViewModelFactory.kt,e/c/ec032d8439653261d8a3664e1be94a5b5b5ff648
+‰
+Yapp/src/main/java/com/appmeito/systemarchitectureexploration/networking/PollingService.kt,f/7/f71394b6b41dd684951d0156a72b3d7a82e53f4f
+ˆ
+Xapp/src/main/java/com/appmeito/systemarchitectureexploration/networking/HttpStreaming.kt,9/7/97535de0580b0de4d330a9beb26c697fac4c2540
+Š
+Zapp/src/main/java/com/appmeito/systemarchitectureexploration/networking/WebSocketClient.kt,d/f/df38f8c15991c0748d5d9247c116604b91226c81
+A
+gradle.properties,2/a/2afbb999f001938c88fa43fc2ef52abf0f8213e4
+T
+$app/src/main/proto/myFirstGrpc.proto,9/e/9ed43a416c440062a760ea3a3cf44f8db8d9c063
+F
+app/proguard-rules.pro,9/e/9e08934d811afe28fbc77aaa3c0d747b94348db9
+…
+Uapp/src/main/java/com/appmeito/systemarchitectureexploration/networking/GrpcClient.kt,7/3/732ea0c21e8ff4092d5eef3f4462aa8f6847bdc8

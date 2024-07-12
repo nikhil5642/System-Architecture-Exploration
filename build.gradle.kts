@@ -2,4 +2,15 @@
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.jetbrains.kotlin.android) apply false
+    alias(libs.plugins.google.protobuf) apply  false
+}
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath(libs.gradle)  // Ensure this uses your current version
+        classpath(libs.protobuf.gradle.plugin)  // Check for the latest version
+    }
 }
