@@ -3,7 +3,9 @@ package com.appmeito.systemarchitectureexploration.mainactivity
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.apollographql.apollo3.ApolloClient
 import com.appmeito.systemarchitectureexploration.MainRepository
+import com.appmeito.systemarchitectureexploration.networking.GraphQLClient
 import com.appmeito.systemarchitectureexploration.networking.GrpcClient
 import com.appmeito.systemarchitectureexploration.networking.HttpHelper.BASE_URL
 import com.appmeito.systemarchitectureexploration.networking.HttpHelper.BASE_HOST
@@ -28,8 +30,14 @@ class MainViewModel(val repository: MainRepository):ViewModel() {
 
     private val webSocketClient= WebSocketClient(client,"$BASE_URL/ws")
 
-    init {
+    private val graphQLClient=GraphQLClient(client,"$BASE_URL/graphql")
 
+
+    fun testGraphQL(){
+        viewModelScope.launch (Dispatchers.IO){
+            val response=graphQLClient.getUser(1)
+            println("GraphQL response: $response")
+        }
     }
 
     fun testGrpcClient(){

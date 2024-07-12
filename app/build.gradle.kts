@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.protobuf)
+    alias(libs.plugins.apollo.plugin)
 }
 
 android {
@@ -86,6 +87,8 @@ dependencies {
 
     implementation(libs.annotations.api)
 
+    implementation(libs.apollo.runtime)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -117,6 +120,16 @@ protobuf {
                 }
             }
         }
+    }
+}
+
+apollo {
+    generateKotlinModels.set(true)
+}
+
+apollo {
+    service("service") {
+        packageName.set("com.appmeito.systemarchitectureexploration")
     }
 }
 //tasks.register<Exec>("generateGrpc") {

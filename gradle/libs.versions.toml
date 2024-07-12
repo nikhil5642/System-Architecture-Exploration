@@ -1,6 +1,8 @@
 [versions]
 agp = "8.5.0"
 annotationsApi = "6.0.53"
+apolloRuntime = "3.8.5"
+apolloPlugin="3.8.5"
 converterGson = "2.9.0"
 gradle = "7.2.2"
 grpcOkhttp = "1.65.0"
@@ -27,6 +29,7 @@ constraintlayout = "2.1.4"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 annotations-api = { module = "org.apache.tomcat:annotations-api", version.ref = "annotationsApi" }
+apollo-runtime = { module = "com.apollographql.apollo3:apollo-runtime", version.ref = "apolloRuntime" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 grpc-grpc-stub = { module = "io.grpc:grpc-stub", version.ref = "grpcStub" }
@@ -59,4 +62,5 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 google-protobuf = { id = "com.google.protobuf", version.ref = "protobufGradlePlugin" }
+apollo-plugin = { id = "com.apollographql.apollo3", version.ref = "apolloPlugin" }
 

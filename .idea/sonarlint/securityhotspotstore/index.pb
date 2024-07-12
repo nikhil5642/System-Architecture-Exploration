@@ -72,3 +72,15 @@ F
 app/proguard-rules.pro,9/e/9e08934d811afe28fbc77aaa3c0d747b94348db9
 …
 Uapp/src/main/java/com/appmeito/systemarchitectureexploration/networking/GrpcClient.kt,7/3/732ea0c21e8ff4092d5eef3f4462aa8f6847bdc8
+T
+$app/src/main/graphql/GetUser.graphql,1/5/1535cf2b8a89322500a8c30cada4a7a2655f6fbe
+ˆ
+Xapp/src/main/java/com/appmeito/systemarchitectureexploration/networking/GraphQLClient.kt,b/5/b56337ff7825f336fc09eda390bd3b7859e74c37
+T
+$app/src/main/graphql/schemas.graphql,0/2/0295e5186d696f8613ad471baa088430df7eeda4
+S
+#app/src/main/graphql/schema.graphql,4/5/45c17ec19d32a88776c8da37cb21de8f4abacce5
+T
+$app/src/main/graphql/schema.graphqls,b/7/b7a837a40cbd3fedfbb54ca7b1721053508c70b7
+\
+,app/src/main/graphql/queries/GetUser.graphql,a/d/adcd688087dc6ed835b0248e92c26982ec34089f

@@ -106,6 +106,11 @@ class MainActivity : ComponentActivity() {
                                 mainViewModel.testGrpcFileDownload() },
                         )
 
+                        CustomButton(
+                            title = "Test GraphQL",
+                            onButtonClick = {
+                                mainViewModel.testGraphQL() },
+                        )
                     }
                 }
             }
@@ -115,7 +120,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun CustomButton(title: String,onButtonClick: () -> Unit, modifier: Modifier = Modifier) {
-    Column(modifier = modifier.padding(16.dp)) {
+    Column(modifier = modifier.padding(start = 16.dp,bottom = 8.dp)) {
         Button(onClick = onButtonClick) {
             Text(title)
         }
