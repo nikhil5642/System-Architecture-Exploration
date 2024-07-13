@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.protobuf)
     alias(libs.plugins.apollo.plugin)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -88,6 +89,11 @@ dependencies {
     implementation(libs.annotations.api)
 
     implementation(libs.apollo.runtime)
+
+    implementation(platform(libs.firebase.bom))
+//    implementation(libs.firebase.analytics)
+//    implementation(libs.firebase.installations)
+    implementation(libs.firebase.messaging)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

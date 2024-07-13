@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android) apply false
     alias(libs.plugins.google.protobuf) apply  false
     alias(libs.plugins.apollo.plugin) apply  false
+    alias(libs.plugins.google.services) apply false
 }
 buildscript {
     repositories {
@@ -13,5 +14,6 @@ buildscript {
     dependencies {
         classpath(libs.gradle)  // Ensure this uses your current version
         classpath(libs.protobuf.gradle.plugin)  // Check for the latest version
+        classpath(libs.google.services)
     }
 }
