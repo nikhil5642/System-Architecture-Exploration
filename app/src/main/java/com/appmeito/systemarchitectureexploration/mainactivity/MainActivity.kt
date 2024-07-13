@@ -1,10 +1,16 @@
 package com.appmeito.systemarchitectureexploration.mainactivity
 
 import android.Manifest
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.os.IBinder
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -27,12 +33,31 @@ import com.appmeito.systemarchitectureexploration.networking.HTTPTYPES
 import com.appmeito.systemarchitectureexploration.networking.HttpClientSelector
 import com.appmeito.systemarchitectureexploration.networking.HttpHelper.BASE_URL
 import com.appmeito.systemarchitectureexploration.networking.HttpStreaming
+import com.appmeito.systemarchitectureexploration.services.MyBackgroundService
+import com.appmeito.systemarchitectureexploration.services.MyBoundService
+import com.appmeito.systemarchitectureexploration.services.MyForegroundService
+import com.appmeito.systemarchitectureexploration.services.MyJobService
 
 import com.appmeito.systemarchitectureexploration.ui.theme.SystemArchitectureExplorationTheme
-import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : ComponentActivity() {
     private lateinit var mainViewModel: MainViewModel
+    private var myService: MyBoundService? = null
+    private var isBound = false
+
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(className: ComponentName, service: IBinder) {
+            val binder = service as MyBoundService.LocalBinder
+            myService = binder.getService()
+            isBound = true
+            myService?.performAction()
+        }
+
+        override fun onServiceDisconnected(arg0: ComponentName) {
+            isBound = false
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,19 +71,11 @@ class MainActivity : ComponentActivity() {
             if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 100)
             }
-        }
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w("FCM", "Fetching FCM registration token failed", task.exception)
-                return@addOnCompleteListener
+            if (checkSelfPermission(Manifest.permission.RECEIVE_BOOT_COMPLETED) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(Manifest.permission.RECEIVE_BOOT_COMPLETED), 100)
             }
-
-            // Get the FCM token
-            val token = task.result
-            Log.d("FCM", "FCM registration token: $token")
-
-            // Save the token or send it to your server
         }
+
         val mainRepository: MainRepository = MainRepository(HttpClientSelector.getClient(HTTPTYPES.HTTP11_OKHTTP))
         mainViewModel= ViewModelProvider(this, MainViewModelFactory(mainRepository))[MainViewModel::class.java]
         enableEdgeToEdge()
@@ -130,12 +147,57 @@ class MainActivity : ComponentActivity() {
                             onButtonClick = {
                                 mainViewModel.testGraphQL() },
                         )
+                        CustomButton(
+                            title = "Generate FCM token",
+                            onButtonClick = {
+                                mainViewModel.generateFCMCToken() },
+                        )
+                        CustomButton(
+                            title = "Start Background Service",
+                            onButtonClick = {
+                                val serviceIntent = Intent(this@MainActivity, MyBackgroundService::class.java)
+                                startService(serviceIntent)
+                            },
+                        )
+                        CustomButton(
+                            title = "Start ForeGround Service",
+                            onButtonClick = {
+                                val serviceIntent = Intent(this@MainActivity, MyForegroundService::class.java)
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    startForegroundService(serviceIntent)
+                                } else {
+                                    startService(serviceIntent)
+                                }
+                            },
+                        )
+                        CustomButton(
+                            title = "Start Bind Service",
+                            onButtonClick = {
+                                Intent(this@MainActivity, MyBoundService::class.java).also { intent ->
+                                    bindService(intent, connection, Context.BIND_AUTO_CREATE)
+                                } },
+                        )
+                        CustomButton(
+                            title = "Schedule Job",
+                            onButtonClick = {
+                                val componentName = ComponentName(this@MainActivity, MyJobService::class.java)
+                                val jobInfo = JobInfo.Builder(1, componentName)
+                                    .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                                    .setPersisted(true)
+                                    .setPeriodic(15 * 60 * 1000) // 15 minutes interval
+                                    .build()
+
+                                val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+                                jobScheduler.schedule(jobInfo) },
+
+                        )
                     }
                 }
             }
         }
     }
 }
+
 
 @Composable
 fun CustomButton(title: String,onButtonClick: () -> Unit, modifier: Modifier = Modifier) {

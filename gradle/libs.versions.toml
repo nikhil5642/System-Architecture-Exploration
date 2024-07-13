@@ -4,8 +4,8 @@ annotationsApi = "6.0.53"
 apolloRuntime = "3.8.5"
 apolloPlugin="3.8.5"
 converterGson = "2.9.0"
+datastorePreferences = "1.1.1"
 firebaseBom = "33.1.2"
-firebaseInstallations = "18.0.0"
 googleServices = "4.4.2"
 gradle = "7.2.2"
 grpcOkhttp = "1.65.0"
@@ -31,12 +31,11 @@ constraintlayout = "2.1.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 annotations-api = { module = "org.apache.tomcat:annotations-api", version.ref = "annotationsApi" }
 apollo-runtime = { module = "com.apollographql.apollo3:apollo-runtime", version.ref = "apolloRuntime" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
-firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
-firebase-installations = { module = "com.google.firebase:firebase-installations", version.ref = "firebaseInstallations" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging"}
 google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }

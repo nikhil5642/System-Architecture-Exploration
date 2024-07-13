@@ -91,9 +91,8 @@ dependencies {
     implementation(libs.apollo.runtime)
 
     implementation(platform(libs.firebase.bom))
-//    implementation(libs.firebase.analytics)
-//    implementation(libs.firebase.installations)
     implementation(libs.firebase.messaging)
+    implementation(libs.androidx.datastore.preferences)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

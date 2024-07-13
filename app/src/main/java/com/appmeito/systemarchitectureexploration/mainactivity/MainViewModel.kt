@@ -12,6 +12,7 @@ import com.appmeito.systemarchitectureexploration.networking.HttpHelper.BASE_HOS
 import com.appmeito.systemarchitectureexploration.networking.HttpStreaming
 import com.appmeito.systemarchitectureexploration.networking.PollingService
 import com.appmeito.systemarchitectureexploration.networking.WebSocketClient
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -117,6 +118,20 @@ class MainViewModel(val repository: MainRepository):ViewModel() {
                 delay(1000)
             }
         }
+    }
 
+    fun generateFCMCToken(){
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("FCM", "Fetching FCM registration token failed", task.exception)
+                return@addOnCompleteListener
+            }
+
+            // Get the FCM token
+            val token = task.result
+            Log.d("FCM", "FCM registration token: $token")
+
+            // Save the token or send it to your server
+        }
     }
 }
