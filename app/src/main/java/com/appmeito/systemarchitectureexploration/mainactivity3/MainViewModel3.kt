@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appmeito.systemarchitectureexploration.MainRepository
-import com.appmeito.systemarchitectureexploration.mainactivity3.NestedChildPaginationDataModel
+import com.appmeito.systemarchitectureexploration.pagination.NestedChildPaginationDataModel
+import com.appmeito.systemarchitectureexploration.pagination.PaginationAdded
+import com.appmeito.systemarchitectureexploration.pagination.PaginationDataModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -22,7 +24,7 @@ class MainViewModel3(val repository: MainRepository):ViewModel() {
 
     private fun addVerticalText(textList: List<MutableList<String>>,pos: PaginationAdded) {
         val currentList:MutableList<MutableList<String>> = nestedTexts.value ?: mutableListOf()
-        if(pos==PaginationAdded.START){
+        if(pos== PaginationAdded.START){
             currentList.addAll(0,textList.toMutableList())
         }else{
             currentList.addAll(textList.toMutableList())
@@ -33,7 +35,7 @@ class MainViewModel3(val repository: MainRepository):ViewModel() {
 
     private fun addHorizontalTexts(textList: List<String>,index: Int,pos: PaginationAdded) {
         val curList:MutableList<MutableList<String>> = nestedTexts.value ?: mutableListOf()
-        if(pos==PaginationAdded.START){
+        if(pos== PaginationAdded.START){
             curList[index].addAll(0,textList)
         }else{
             curList[index].addAll(textList)
@@ -42,7 +44,7 @@ class MainViewModel3(val repository: MainRepository):ViewModel() {
         newTexts.postValue(NestedChildPaginationDataModel(textList,index,pos))
     }
 
-    fun loadHorizontalData(index:Int,pos:PaginationAdded){
+    fun loadHorizontalData(index:Int,pos: PaginationAdded){
         viewModelScope.launch (Dispatchers.IO){
             val list= mutableListOf<String>()
             for(i in 0..10){

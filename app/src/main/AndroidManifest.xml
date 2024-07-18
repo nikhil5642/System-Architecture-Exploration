@@ -27,6 +27,13 @@
             android:theme="@style/Theme.SystemArchitectureExploration">
         </activity>
         <activity
+            android:name=".mainactivity2.FlowActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat">
+        </activity>
+
+        <activity
             android:name=".storageactivity.StorageActivity"
             android:exported="true"
             android:label="@string/app_name"

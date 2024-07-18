@@ -14,18 +14,18 @@ import com.appmeito.systemarchitectureexploration.networking.HttpClientSelector
 import com.appmeito.systemarchitectureexploration.pagination.PaginationAdded
 
 
-class MainActivity2 : AppCompatActivity(){
-    lateinit var viewModel2: MainViewModel2
+class FlowActivity : AppCompatActivity(){
+    lateinit var viewModel2: FlowViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val mainRepository: MainRepository = MainRepository(HttpClientSelector.getClient(HTTPTYPES.HTTP11_OKHTTP))
 
-        viewModel2=ViewModelProvider(this,MainViewModelFactory2(mainRepository))[MainViewModel2::class.java]
+        viewModel2=ViewModelProvider(this,FlowViewModelFactory(mainRepository))[FlowViewModel::class.java]
         val sharedViewPool=RecycledViewPool()
         sharedViewPool.setMaxRecycledViews(0,10)
         sharedViewPool.setMaxRecycledViews(1,30)
-        val adapter:RecyclerViewAdapter=RecyclerViewAdapter(sharedViewPool)
+        val adapter:FlowRecyclerViewAdapter=FlowRecyclerViewAdapter(sharedViewPool)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         val layoutManager=LinearLayoutManager(this)

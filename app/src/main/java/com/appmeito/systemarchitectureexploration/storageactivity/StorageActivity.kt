@@ -16,35 +16,36 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModelProvider
-import com.appmeito.systemarchitectureexploration.StorageRepository
+import androidx.lifecycle.lifecycleScope
+import com.appmeito.systemarchitectureexploration.storage.StorageRepository
 import com.appmeito.systemarchitectureexploration.mainactivity.CustomButton
+import com.appmeito.systemarchitectureexploration.storage.room.AppDatabase
+import com.appmeito.systemarchitectureexploration.storage.room.UserRepository
 
 import com.appmeito.systemarchitectureexploration.ui.theme.SystemArchitectureExplorationTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class StorageActivity : ComponentActivity() {
     private lateinit var storageViewModel: StorageViewModel
 
 
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 101)
+        checkAndRequestPermissions()
+
+        lifecycleScope.launch (Dispatchers.IO){
+            val db = withContext(Dispatchers.IO) {
+                AppDatabase.getDatabase(application)
             }
-            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 100)
-            }
-            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 100)
-            }
-            if (checkSelfPermission(Manifest.permission.RECEIVE_BOOT_COMPLETED) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(Manifest.permission.RECEIVE_BOOT_COMPLETED), 100)
-            }
+            val userRepository = UserRepository(db.userDao())
+
+            storageViewModel = ViewModelProvider(this@StorageActivity, StorageViewModelFactory(StorageRepository(), userRepository))[StorageViewModel::class.java]
         }
 
-        val repository: StorageRepository = StorageRepository()
-        storageViewModel= ViewModelProvider(this, StorageViewModelFactory(repository))[StorageViewModel::class.java]
         enableEdgeToEdge()
         setContent {
             SystemArchitectureExplorationTheme {
@@ -75,8 +76,36 @@ class StorageActivity : ComponentActivity() {
                             title = "Test Proto Datastore Storage Token",
                             onButtonClick = { storageViewModel.testProtoDatastore(this@StorageActivity) },
                         )
+                        CustomButton(
+                            title = "Add user, ROOM DB",
+                            onButtonClick = { storageViewModel.addUser("nikhil","agrawal") },
+                        )
+                        CustomButton(
+                            title = "Delete all users, ROOM DB",
+                            onButtonClick = { storageViewModel.deleteAllUsers() },
+                        )
+                        CustomButton(
+                            title = "Print all users, ROOM DB",
+                            onButtonClick = { storageViewModel.listAvailableUsers() },
+                        )
                     }
                 }
+            }
+        }
+    }
+    fun checkAndRequestPermissions(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 101)
+            }
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 100)
+            }
+            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 100)
+            }
+            if (checkSelfPermission(Manifest.permission.RECEIVE_BOOT_COMPLETED) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(Manifest.permission.RECEIVE_BOOT_COMPLETED), 100)
             }
         }
     }

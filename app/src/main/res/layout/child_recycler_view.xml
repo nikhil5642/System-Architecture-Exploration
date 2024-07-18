@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="128dp"
     android:background="@color/white"
-    tools:context=".mainactivity2.MainActivity2">
+    tools:context=".mainactivity2.FlowActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/child_recycler_view"

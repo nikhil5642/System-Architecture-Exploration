@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.google.protobuf)
     alias(libs.plugins.apollo.plugin)
     alias(libs.plugins.google.services)
+    kotlin("kapt")
 }
 
 android {
@@ -85,6 +86,11 @@ dependencies {
     implementation(libs.grpc.protobuf.lite)
     implementation(libs.grpc.grpc.stub)
     implementation(libs.protobuf.javalite)
+
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
+    // Optional - Kotlin Extensions and Coroutines support for Room
+    implementation(libs.androidx.room.ktx)
 
     implementation(libs.annotations.api)
 

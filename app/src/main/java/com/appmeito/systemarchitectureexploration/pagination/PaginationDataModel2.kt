@@ -1,4 +1,4 @@
-package com.appmeito.systemarchitectureexploration.mainactivity2
+package com.appmeito.systemarchitectureexploration.pagination
 
 enum class PaginationAdded{
     START,

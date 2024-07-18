@@ -1,28 +1,41 @@
 package com.appmeito.systemarchitectureexploration.storageactivity
 
 import android.content.Context
-import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.appmeito.systemarchitectureexploration.MainRepository
-import com.appmeito.systemarchitectureexploration.StorageRepository
-import com.appmeito.systemarchitectureexploration.networking.GraphQLClient
-import com.appmeito.systemarchitectureexploration.networking.GrpcClient
-import com.appmeito.systemarchitectureexploration.networking.HttpHelper.BASE_URL
-import com.appmeito.systemarchitectureexploration.networking.HttpHelper.BASE_HOST
-import com.appmeito.systemarchitectureexploration.networking.HttpStreaming
-import com.appmeito.systemarchitectureexploration.networking.PollingService
-import com.appmeito.systemarchitectureexploration.networking.WebSocketClient
-import com.google.firebase.messaging.FirebaseMessaging
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.appmeito.systemarchitectureexploration.adapter.GetUserQuery_ResponseAdapter
+import com.appmeito.systemarchitectureexploration.storage.StorageRepository
+import com.appmeito.systemarchitectureexploration.storage.room.User
+import com.appmeito.systemarchitectureexploration.storage.room.UserRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.Protocol
-import java.util.concurrent.TimeUnit
 
-class StorageViewModel(val storageRepository: StorageRepository):ViewModel() {
+class StorageViewModel(private val storageRepository: StorageRepository,
+                       private val userRepository: UserRepository):ViewModel() {
 
+
+    fun addUser(name: String, email: String) {
+        viewModelScope.launch (Dispatchers.IO){
+            userRepository.insertUser(User(name = name, email = email))
+        }
+    }
+
+    fun deleteAllUsers() {
+        viewModelScope.launch (Dispatchers.IO){
+            userRepository.deleteAllUsers()
+        }
+    }
+    fun listAvailableUsers(){
+        viewModelScope.launch (Dispatchers.IO){
+            userRepository.getAllUsers().forEach {
+                val name=it.name
+                println("User List $name)")
+            }
+        }
+    }
 
    fun testSharedPreferences(context: Context){
        storageRepository.saveTokenSharedPref(context,"Shared Prefrence Token")

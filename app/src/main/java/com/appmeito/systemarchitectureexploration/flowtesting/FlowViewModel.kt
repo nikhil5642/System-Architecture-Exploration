@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class MainViewModel2(val repository: MainRepository):ViewModel() {
+class FlowViewModel(val repository: MainRepository):ViewModel() {
     val texts = MutableLiveData<MutableList<String>>(mutableListOf())
     val newTexts=MutableLiveData<PaginationDataModel<List<String>>>()
     var count=0

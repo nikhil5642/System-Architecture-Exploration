@@ -1,6 +1,4 @@
-package com.appmeito.systemarchitectureexploration.mainactivity3
-
-import com.appmeito.systemarchitectureexploration.mainactivity2.PaginationAdded
+package com.appmeito.systemarchitectureexploration.pagination
 
 
 data class NestedChildPaginationDataModel<T>(val data:T,

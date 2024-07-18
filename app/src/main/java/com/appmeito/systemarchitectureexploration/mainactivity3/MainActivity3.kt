@@ -13,6 +13,7 @@ import com.appmeito.systemarchitectureexploration.R
 import com.appmeito.systemarchitectureexploration.mainactivity2.NestedRecyclerViewAdapter.ViewHolder
 import com.appmeito.systemarchitectureexploration.networking.HTTPTYPES
 import com.appmeito.systemarchitectureexploration.networking.HttpClientSelector
+import com.appmeito.systemarchitectureexploration.pagination.PaginationAdded
 
 
 class MainActivity3 : AppCompatActivity(),RecyclerPaginationInterface{
