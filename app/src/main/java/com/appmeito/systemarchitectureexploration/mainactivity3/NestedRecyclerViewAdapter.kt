@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.RecycledViewPool
 import com.appmeito.systemarchitectureexploration.R
+import com.appmeito.systemarchitectureexploration.mainactivity3.RecyclerPaginationInterface
 import com.appmeito.systemarchitectureexploration.pagination.PaginationAdded
 
 class NestedRecyclerViewAdapter(val context: Context,val viewPool: RecycledViewPool, val listener: RecyclerPaginationInterface):

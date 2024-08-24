@@ -9,32 +9,40 @@ import com.appmeito.systemarchitectureexploration.pagination.PaginationAdded
 import com.appmeito.systemarchitectureexploration.pagination.PaginationDataModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class FlowViewModel(val repository: MainRepository):ViewModel() {
-    val texts = MutableLiveData<MutableList<String>>(mutableListOf())
-    val newTexts=MutableLiveData<PaginationDataModel<List<String>>>()
+    val texts = MutableStateFlow<MutableList<String>>(mutableListOf())
+    val newTexts= MutableSharedFlow<PaginationDataModel<List<String>>>()
     var count=0
     var count2=0
     init {
         loadData()
+        texts.asStateFlow()
     }
 
     private fun addText(text: String) {
-        val currentList = texts.value ?: mutableListOf()
+        val currentList = texts.value
         currentList.add(text)
-        texts.postValue(currentList)
+        texts.value=currentList
         val pag= if(count%2==0)  PaginationAdded.START else PaginationAdded.END
-        newTexts.postValue(PaginationDataModel(mutableListOf(text),pag))
+        viewModelScope.launch {
+            newTexts.emit(PaginationDataModel(mutableListOf(text),pag))
+        }
     }
 
     private fun addTexts(textList: List<String>) {
-        val currentList = texts.value ?: mutableListOf()
+        val currentList = texts.value
         currentList.addAll(textList)
-        texts.postValue(currentList)
+        texts.value=currentList
         val pag= if(count%2==0)  PaginationAdded.START else PaginationAdded.END
-        newTexts.postValue(PaginationDataModel(textList,pag))
-
+        viewModelScope.launch {
+            newTexts.emit(PaginationDataModel(textList,pag))
+        }
     }
 
     fun loadData(){
